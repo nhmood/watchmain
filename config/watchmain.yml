@@ -1,0 +1,8 @@
+mailgun:
+  api_key: ""
+  domain: ""
+  from: ""
+
+
+whois:
+  api_key: ""
