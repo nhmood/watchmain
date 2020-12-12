@@ -57,6 +57,7 @@ module Watchmain
   end
 
   # perform the whois lookup for the domain
+  Log.debug { "Performing whois.lookup on #{domain}" }
   latest_hash = whois.lookup(domain)
   Log.debug { "Latest Domain Hash for #{domain}  : #{latest_hash}" }
   Log.debug { "Existing Domain Hash for #{domain}: #{domain_hash}" }
@@ -67,29 +68,41 @@ module Watchmain
   # then we should send out an email on the update
   if domain_hash.empty?
     Log.info { "Now watching #{domain}, sending intro email" }
-    message = Mailgun::Message.new(
-      from: "watchmain@goosecode.com",
-      to:   "nhmood@goosecode.com",
-      subject: "Watchmain - 🔥 Now watching #{domain} 🔥",
-      text: "Now watching #{domain}"
-    )
-    Log.debug { message }
-    mailgun.send(message.to_hash)
+
+    # cycle through all the "to" entries in the config and send an email to each
+    from = config["mailgun"]["from"]
+    config["mailgun"]["to"].as_a.each do |to|
+      message = Mailgun::Message.new(
+        from: from.as_s,
+        to: to.as_s,
+        subject: "Watchmain - 🔥 Now watching #{domain} 🔥",
+        text: "Now watching #{domain}"
+      )
+      Log.debug { message }
+      mailgun.send(message.to_hash)
+    end
 
   elsif domain_hash != latest_hash
     Log.info { "Latest domain whois hash doesn't match on record, sending update email and updating local record" }
-    message = Mailgun::Message.new(
-      from: "watchmain@goosecode.com",
-      to: "nhmood@goosecode.com",
-      subject: "Watchmain - 🔥 #{domain} whois updated!",
-      text: "#{domain} updated\n\nhttps://instantdomainsearch.com/#search=#{domain}"
-    )
-    Log.debug { message }
-    mailgun.send(message.to_hash)
-    Log.debug { "Writing hash update #{latest_hash} for #{domain} to #{domain_file}" }
-    File.write(domain_file, latest_hash)
+    # cycle through all the "to" entries in the config and send an email to each
+    from = config["mailgun"]["from"]
+    config["mailgun"]["to"].as_a.each do |to|
+      message = Mailgun::Message.new(
+        from: from.as_s,
+        to: to.as_s,
+        subject: "Watchmain - 🔥 #{domain} whois updated!",
+        text: "#{domain} updated\n\nhttps://instantdomainsearch.com/#search=#{domain}"
+      )
+      Log.debug { message }
+      mailgun.send(message.to_hash)
+    end
+
 
   else
     Log.info { "No updates for #{domain}" }
   end
+
+  # write the latest hash value for the domain to file
+  Log.debug { "Writing hash update #{latest_hash} for #{domain} to #{domain_file}" }
+  File.write(domain_file, latest_hash)
 end
