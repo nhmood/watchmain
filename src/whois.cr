@@ -5,7 +5,8 @@ module Watchmain
 
     @base_url : String
     def initialize(@api_key : String)
-      puts "Initializing WhoisXMLAPI for #{@api_key}"
+      Log.debug { "Initializing WhoisXMLAPI" }
+      Log.debug { "Initializing WhoisXMLAPI for #{@api_key}" }
 
       @client = HTTP::Client.new(WHOIS_HOST, 443, true)
       @base_url = DOMAIN_URL + "outputFormat=JSON&apiKey=#{@api_key}"
@@ -13,13 +14,15 @@ module Watchmain
 
 
     def lookup(domain : String)
-      puts "Performing Whois lookup for #{domain}"
+      Log.info { "Whois#lookup called for #{domain}" }
       path = @base_url + "&domainName=#{domain}"
+      Log.debug { "WhoisXMLAPI query address: #{path}" }
 
       response = @client.get(path)
-      puts response
-      puts response.body
+      Log.info { "WhoisXMLAPI request: #{response}" }
+      Log.debug { response.body }
 
+      # generate MD5 hash to compare against previous requests
       hash = Digest::MD5.base64digest(response.body)
       return hash
     end # lookup
