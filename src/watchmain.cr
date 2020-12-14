@@ -12,6 +12,18 @@ module Watchmain
   Log.setup_from_env
   Log.info { "Watchmain v0.0.1 - #{Time.utc}" }
 
+
+  process_path = Process.executable_path
+  if process_path
+    watchmain_path = File.dirname(process_path)
+  else
+    Dir.mkdir("/tmp/watchmain")
+    Dir.mkdir("/tmp/watchmain/domains")
+    watchmain_path = "/tmp/watchmain"
+  end
+  Log.debug { "Executable running path: #{watchmain_path}" }
+
+
   # if we don't have the right arguments (config + domain)
   # then show help and exit
   if ARGV.size != 2
@@ -45,7 +57,7 @@ module Watchmain
   Log.debug { whois }
 
   # attempt to lookup an existing entry for the domain
-  domain_file = __DIR__ + "/../domains/#{domain}"
+  domain_file = watchmain_path + "/domains/" + domain
   Log.debug { "Looking for domain entry in #{domain_file}" }
   if File.exists?(domain_file)
     Log.info { "#{domain} already tracked, reading existing whois hash" }
