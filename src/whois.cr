@@ -22,11 +22,41 @@ module Watchmain
       Log.info { "WhoisXMLAPI request: #{response}" }
       Log.debug { response.body }
 
+      whois = JSON.parse(response.body)
+      Log.debug { whois }
+      data = whois["WhoisRecord"]["registryData"]
+      # todo - should probably replace this with proper JSON mapping
+      fields = {
+        "createdDate":                  whois["WhoisRecord"]["createdDate"],
+        "updatedDate":                  whois["WhoisRecord"]["updatedDate"],
+        "expiresDate":                  whois["WhoisRecord"]["expiresDate"],
+        "domainName":                   whois["WhoisRecord"]["domainName"],
+        "nameServers":                  whois["WhoisRecord"]["nameServers"],
+        "status":                       whois["WhoisRecord"]["status"],
+        "parseCode":                    whois["WhoisRecord"]["parseCode"],
+        "header":                       whois["WhoisRecord"]["header"],
+        "footer":                       whois["WhoisRecord"]["footer"],
+        "customField1Name":             whois["WhoisRecord"]["customField1Name"],
+        "customField1Value":            whois["WhoisRecord"]["customField1Value"],
+        "registrarName":                whois["WhoisRecord"]["registrarName"],
+        "registrarIANAID":              whois["WhoisRecord"]["registrarIANAID"],
+        "createdDateNormalized":        whois["WhoisRecord"]["createdDateNormalized"],
+        "updatedDateNormalized":        whois["WhoisRecord"]["updatedDateNormalized"],
+        "expiresDateNormalized":        whois["WhoisRecord"]["expiresDateNormalized"],
+        "customField2Name":             whois["WhoisRecord"]["customField2Name"],
+        "customField3Name":             whois["WhoisRecord"]["customField3Name"],
+        "customField2Value":            whois["WhoisRecord"]["customField2Value"],
+        "customField3Value":            whois["WhoisRecord"]["customField3Value"],
+        "whoisServer":                  whois["WhoisRecord"]["whoisServer"]
+      }
+
+      record = fields.to_pretty_json
+
       # generate MD5 hash to compare against previous requests
-      hash = Digest::MD5.base64digest(response.body)
+      hash = Digest::MD5.base64digest(record)
 
       # return the body + hash
-      return response.body, hash
+      return record, hash
     end # lookup
   end # Whois
 end # Watchmain

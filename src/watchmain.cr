@@ -108,8 +108,10 @@ module Watchmain
     # cycle through all the "to" entries in the config and send an email to each
 
     diff = Diff.new(domain_body, latest_body, Diff::MyersLinear)
+    diff_string = IO::Memory.new
+    diff.to_s(diff_string, false)
     Log.debug { "Diff between domain body" }
-    Log.debug { diff.to_s }
+    Log.debug { diff_string }
 
     from = config["mailgun"]["from"]
     config["mailgun"]["to"].as_a.each do |to|
@@ -117,7 +119,7 @@ module Watchmain
         from: from.as_s,
         to: to.as_s,
         subject: "Watchmain - 🔥 #{domain} whois updated!",
-        text: "#{domain} updated\n\nhttps://instantdomainsearch.com/#search=#{domain}\n\n#{diff.to_s}"
+        text: "#{domain} updated\n\nhttps://instantdomainsearch.com/#search=#{domain}\n\n#{diff_string}"
       )
       Log.debug { message }
       mailgun.send(message.to_hash)
