@@ -24,7 +24,9 @@ module Watchmain
 
       # generate MD5 hash to compare against previous requests
       hash = Digest::MD5.base64digest(response.body)
-      return hash
+
+      # return the body + hash
+      return response.body, hash
     end # lookup
   end # Whois
 end # Watchmain

@@ -3,6 +3,8 @@ require "base64"
 require "digest/md5"
 require "http/client"
 require "log"
+require "json"
+require "diff"
 
 require "./mailgun"
 require "./whois"
@@ -57,20 +59,27 @@ module Watchmain
   Log.debug { whois }
 
   # attempt to lookup an existing entry for the domain
-  domain_file = watchmain_path + "/domains/" + domain
-  Log.debug { "Looking for domain entry in #{domain_file}" }
-  if File.exists?(domain_file)
-    Log.info { "#{domain} already tracked, reading existing whois hash" }
-    domain_hash = File.read(domain_file)
-    Log.debug { "#{domain} entry hash -> #{domain_hash}" }
-  else
-    Log.info { "New entry for #{domain}" }
-    domain_hash = ""
+  domain_hash_file = watchmain_path + "/domains/" + domain
+  domain_body_file = watchmain_path + "/domains/" + domain + ".txt"
+  Log.debug { "Looking for domain entry in #{domain_hash_file}" }
+
+  domain_hash = ""
+  domain_body = ""
+
+  if File.exists?(domain_hash_file)
+    Log.info { "#{domain_hash_file} already tracked, reading existing whois hash" }
+    domain_hash = File.read(domain_hash_file)
   end
+
+  if File.exists?(domain_body_file)
+    Log.info { "#{domain_body_file} already tracked, reading existing whois body" }
+    domain_body = File.read(domain_body_file)
+  end
+
 
   # perform the whois lookup for the domain
   Log.debug { "Performing whois.lookup on #{domain}" }
-  latest_hash = whois.lookup(domain)
+  latest_body, latest_hash = whois.lookup(domain)
   Log.debug { "Latest Domain Hash for #{domain}  : #{latest_hash}" }
   Log.debug { "Existing Domain Hash for #{domain}: #{domain_hash}" }
 
@@ -97,13 +106,18 @@ module Watchmain
   elsif domain_hash != latest_hash
     Log.info { "Latest domain whois hash doesn't match on record, sending update email and updating local record" }
     # cycle through all the "to" entries in the config and send an email to each
+
+    diff = Diff.new(domain_body, latest_body, Diff::MyersLinear)
+    Log.debug { "Diff between domain body" }
+    Log.debug { diff.to_s }
+
     from = config["mailgun"]["from"]
     config["mailgun"]["to"].as_a.each do |to|
       message = Mailgun::Message.new(
         from: from.as_s,
         to: to.as_s,
         subject: "Watchmain - 🔥 #{domain} whois updated!",
-        text: "#{domain} updated\n\nhttps://instantdomainsearch.com/#search=#{domain}"
+        text: "#{domain} updated\n\nhttps://instantdomainsearch.com/#search=#{domain}\n\n#{diff.to_s}"
       )
       Log.debug { message }
       mailgun.send(message.to_hash)
@@ -115,6 +129,7 @@ module Watchmain
   end
 
   # write the latest hash value for the domain to file
-  Log.debug { "Writing hash update #{latest_hash} for #{domain} to #{domain_file}" }
-  File.write(domain_file, latest_hash)
+  Log.debug { "Writing hash update #{latest_hash} for #{domain} to #{domain_hash_file}" }
+  File.write(domain_hash_file, latest_hash)
+  File.write(domain_body_file, latest_body)
 end

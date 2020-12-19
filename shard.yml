@@ -8,6 +8,11 @@ targets:
   watchmain:
     main: src/watchmain.cr
 
+
+dependencies:
+  diff:
+    github: watzon/diff
+
 crystal: 0.35.1
 
 license: MIT
