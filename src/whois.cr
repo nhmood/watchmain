@@ -34,8 +34,6 @@ module Watchmain
         "nameServers":                  whois["WhoisRecord"]["nameServers"],
         "status":                       whois["WhoisRecord"]["status"],
         "parseCode":                    whois["WhoisRecord"]["parseCode"],
-        "header":                       whois["WhoisRecord"]["header"],
-        "footer":                       whois["WhoisRecord"]["footer"],
         "customField1Name":             whois["WhoisRecord"]["customField1Name"],
         "customField1Value":            whois["WhoisRecord"]["customField1Value"],
         "registrarName":                whois["WhoisRecord"]["registrarName"],
