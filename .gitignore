@@ -6,3 +6,4 @@ config/watchmain.yml
 /.shards/
 *.dwarf
 watchmain
+porkbun/porkbun
