@@ -1,0 +1,24 @@
+name: Update Porkbun Domains
+on:
+  schedule:
+    # 9am est
+    - cron: "0 13 * * *"
+
+jobs:
+  UpdatePorkbunDomains:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Install Crystal
+        uses: oprypin/install-crystal@v1
+
+      - name: Install shards
+        run: shards install --ignore-crystal-version
+
+      - name: Build Porkbun scraper
+        run: crystal build src/porkbun.cr
+
+      - name: Generate and Commit Porkbun Domains
+        run: ./bin/update_domains.sh
