@@ -3,6 +3,7 @@ on:
   schedule:
     # 9am est
     - cron: "0 13 * * *"
+  workflow_dispatch:
 
 jobs:
   UpdatePorkbunDomains:
