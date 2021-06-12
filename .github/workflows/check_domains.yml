@@ -23,3 +23,7 @@ jobs:
 
       - name: Generate and Commit Domain Status Changes
         run: ./bin/check_domains.sh
+        env:
+          MAILGUN_API_KEY: ${{ secrets.MAILGUN_API_KEY }}
+          WHOIS_API_KEY: ${{ secrets.WHOIS_API_KEY }}
+
