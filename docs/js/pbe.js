@@ -17,7 +17,8 @@ async function renderDomains(){
   const filtered = domains
     .filter(filters.price)
     .filter(filters.renewal)
-    .filter(filters.transfer);
+    .filter(filters.transfer)
+    .filter(filters.domain);
 
   let sorted = filtered.sort(sortDomains);
 
@@ -32,11 +33,13 @@ function getFilters(){
   price     = [parseInt(price_min.value),     parseInt(price_max.value)]
   renewal   = [parseInt(renewal_min.value),   parseInt(renewal_max.value)]
   transfer  = [parseInt(transfer_min.value),  parseInt(transfer_max.value)]
+  domain    = domain_name.value || "";
 
   return {
     price: generateFilter("price", price),
     renewal: generateFilter("renewal", renewal),
-    transfer: generateFilter("transfer", transfer)
+    transfer: generateFilter("transfer", transfer),
+    domain: generateTextFilter(domain)
   }
 }
 
@@ -49,6 +52,13 @@ function generateFilter(key, bounds){
     let upper = !isNaN(bounds[1]) ? data < bounds[1] : true;
 
     return lower && upper;
+  }
+}
+
+function generateTextFilter(substr){
+  return function(entry){
+    if (substr == undefined || substr.length == 0){ return true };
+    return entry.domain.match(substr) != undefined;
   }
 }
 
@@ -92,14 +102,14 @@ function clearSearch(e){
 }
 
 
-
-[price_min, price_max, renewal_min, renewal_max, transfer_min, transfer_max].forEach( e => {
+[price_min, price_max, renewal_min, renewal_max, transfer_min, transfer_max, domain_name].forEach( e => {
   e.addEventListener("keyup", renderDomains);
 })
 
 document.querySelectorAll("i.clear").forEach( e => {
   e.addEventListener("click", clearSearch)
 })
+
 document.querySelectorAll("th[id*='sort']").forEach( e => {
   e.addEventListener("click", updateSort);
 })
