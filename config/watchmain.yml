@@ -1,9 +1,9 @@
 mailgun:
   api_key: "" # LEAVE BLANK IF USING GITHUB ACTIONS / ENV SECRETS
-  domain: "mg.goosecode.com"
-  from: "watchmain@goosecode.com"
+  domain: ""
+  from: ""
   to:
-    - "nhmood@goosecode.com"
+    - ""
 
 
 whois:
@@ -11,4 +11,4 @@ whois:
 
 
 domains:
-  - "goosecode.com"
+  - ""

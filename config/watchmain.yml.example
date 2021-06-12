@@ -1,12 +1,15 @@
 mailgun:
-  api_key: "" # LEAVE BLANK IF USING GITHUB ACTIONS / ENV SECRETS
-  domain: ""
-  from: ""
+  api_key: "API_KEY_HERE" # LEAVE BLANK IF USING GITHUB ACTIONS / ENV SECRETS
+  domain: "mg.yourdomain.com"
+  from: "watchmain@yourdomain.com"
+  to:
+    - "your@email.com"
 
 
 whois:
-  api_key: ""  # LEAVE BLANK IF USING GITHUB ACTIONS / ENV SECRETS
+  api_key: "API_KEY_HERE" # LEAVE BLANK IF USING GITHUB ACTIONS / ENV SECRETS
 
 
 domains:
-  - "google.com"
+  - "reallygooddomain.com"
+  - "prettygooddomain.com"

@@ -1,8 +1,9 @@
 name: Update Porkbun Domains
 on:
-  schedule:
-    # 9am est
-    - cron: "0 13 * * *"
+# UNCOMMENT THESE LINES TO ENABLE AUTOMATIC RUNS
+#  schedule:
+#    # 9am est
+#    - cron: "0 13 * * *"
   workflow_dispatch:
 
 jobs:
