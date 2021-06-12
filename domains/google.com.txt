@@ -4,12 +4,12 @@
   "expiresDate": "2028-09-13T00:00:00-0700",
   "domainName": "google.com",
   "nameServers": {
-    "rawText": "ns4.google.com\nns3.google.com\nns1.google.com\nns2.google.com\n",
+    "rawText": "ns2.google.com\nns3.google.com\nns1.google.com\nns4.google.com\n",
     "hostNames": [
-      "ns4.google.com",
+      "ns2.google.com",
       "ns3.google.com",
       "ns1.google.com",
-      "ns2.google.com"
+      "ns4.google.com"
     ],
     "ips": []
   },
