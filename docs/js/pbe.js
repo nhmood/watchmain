@@ -84,11 +84,22 @@ function updateSort(e){
 }
 
 
+function clearSearch(e){
+  e.target.parentNode.querySelectorAll("input").forEach( e => {
+    e.value = "";
+  })
+  renderDomains();
+}
+
+
 
 [price_min, price_max, renewal_min, renewal_max, transfer_min, transfer_max].forEach( e => {
   e.addEventListener("keyup", renderDomains);
 })
 
+document.querySelectorAll("i.clear").forEach( e => {
+  e.addEventListener("click", clearSearch)
+})
 document.querySelectorAll("th[id*='sort']").forEach( e => {
   e.addEventListener("click", updateSort);
 })

@@ -17,6 +17,7 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter&family=Staatliches&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -34,32 +35,39 @@
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
-    <div class="row">
+    <div class="row header">
       <h1>Porkbun Domains</h1>
       <div class="row">
-      <input id="price_min" type="number" placeholder="price min"></input>
-      <input id="price_max" type="number" placeholder="price max"></input>
+        <input id="price_min" type="number" placeholder="price min"></input>
+        <input id="price_max" type="number" placeholder="price max"></input>
+        <i class="fas fa-times-circle clear"></i>
       </div>
       <div class="row">
-      <input id="renewal_min" type="number" placeholder="renewal min"></input>
-      <input id="renewal_max" type="number" placeholder="renewal max"></input>
+        <input id="renewal_min" type="number" placeholder="renewal min"></input>
+        <input id="renewal_max" type="number" placeholder="renewal max"></input>
+        <i class="fas fa-times-circle clear"></i>
       </div>
       <div class="row">
-      <input id="transfer_min" type="number" placeholder="transfer min"></input>
-      <input id="transfer_max" type="number" placeholder="transfer max"></input>
+        <input id="transfer_min" type="number" placeholder="transfer min"></input>
+        <input id="transfer_max" type="number" placeholder="transfer max"></input>
+        <i class="fas fa-times-circle clear"></i>
       </div>
+      <div class="row">
+        <input id="name" type="text" placeholder="domain"></input>
+        <i class="fas fa-times-circle clear"></i>
+    </div>
 
-      <div class="row">
-        <table id="domains" class="u-full-width">
-          <thead>
-            <th id="sort_domain" data-f="domain">domain</th>
-            <th id="sort_price" data-f="price">price</th>
-            <th id="sort_renewal" data-f="renewal">renewal</th>
-            <th id="sort_transfer" data-f="transfer">transfer</th>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+    <div class="row domains">
+      <table class="u-full-width">
+        <thead>
+          <th id="sort_domain" data-f="domain">domain</th>
+          <th id="sort_price" data-f="price">price</th>
+          <th id="sort_renewal" data-f="renewal">renewal</th>
+          <th id="sort_transfer" data-f="transfer">transfer</th>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
 
 
