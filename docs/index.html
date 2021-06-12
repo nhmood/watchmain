@@ -1,129 +1,87 @@
-<h1>domains</h1>
-<div class="row">
-<input id="price_min" type="number" placeholder="price min"></input>
-<input id="price_max" type="number" placeholder="price max"></input>
-</div>
-<div class="row">
-<input id="renewal_min" type="number" placeholder="renewal min"></input>
-<input id="renewal_max" type="number" placeholder="renewal max"></input>
-</div>
-<div class="row">
-<input id="transfer_min" type="number" placeholder="transfer min"></input>
-<input id="transfer_max" type="number" placeholder="transfer max"></input>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Porkbun Explorer</title>
+  <meta name="description" content="">
+  <meta name="author" content="nhmood">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Staatliches&display=swap" rel="stylesheet">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/custom.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="row">
+      <h1>Porkbun Domains</h1>
+      <div class="row">
+      <input id="price_min" type="number" placeholder="price min"></input>
+      <input id="price_max" type="number" placeholder="price max"></input>
+      </div>
+      <div class="row">
+      <input id="renewal_min" type="number" placeholder="renewal min"></input>
+      <input id="renewal_max" type="number" placeholder="renewal max"></input>
+      </div>
+      <div class="row">
+      <input id="transfer_min" type="number" placeholder="transfer min"></input>
+      <input id="transfer_max" type="number" placeholder="transfer max"></input>
+      </div>
+
+      <div class="row">
+        <table id="domains" class="u-full-width">
+          <thead>
+            <th id="sort_domain" data-f="domain">domain</th>
+            <th id="sort_price" data-f="price">price</th>
+            <th id="sort_renewal" data-f="renewal">renewal</th>
+            <th id="sort_transfer" data-f="transfer">transfer</th>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+    </div>
 
 
-<table id="domains">
-  <thead>
-    <th id="sort_domain" data-f="domain">domain</th>
-    <th id="sort_price" data-f="price">price</th>
-    <th id="sort_renewal" data-f="renewal">renewal</th>
-    <th id="sort_transfer" data-f="transfer">transfer</th>
-  </thead>
+    <div class="row footer">
+      <p><a href="https://goosecode.com">goosecode</a> © 2021</p>
+      <p>made in somerville, ma with 🥃</p>
+    </div>
+  </div>
 
-  <tbody>
-  </tbody>
-</table>
+<!-- End Document
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<script src="js/pbe.js"></script>
 
-
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-42602876-6"></script>
 <script>
-  var sortParameter = null;
-  var sortDirection = 1;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  async function getDomains(){
-    const response = await fetch('data/domains.json');
-    const data = await response.json();
-    return Object.values(data);
-  }
-
-  async function renderDomains(){
-    const domains = await getDomains();
-    const tbody = document.querySelector("tbody");
-    tbody.innerHTML = '';
-
-    const filters = getFilters();
-
-    const filtered = domains
-      .filter(filters.price)
-      .filter(filters.renewal)
-      .filter(filters.transfer);
-
-    let sorted = filtered.sort(sortDomains);
-
-    sorted.forEach(domain => {
-      let r = generateRow(domain);
-      tbody.appendChild(r)
-    })
-  }
-
-
-  function getFilters(){
-    price     = [parseInt(price_min.value),     parseInt(price_max.value)]
-    renewal   = [parseInt(renewal_min.value),   parseInt(renewal_max.value)]
-    transfer  = [parseInt(transfer_min.value),  parseInt(transfer_max.value)]
-
-    return {
-      price: generateFilter("price", price),
-      renewal: generateFilter("renewal", renewal),
-      transfer: generateFilter("transfer", transfer)
-    }
-  }
-
-  function generateFilter(key, bounds){
-    return function(entry){
-      let data = entry[key].cost;
-      if (isNaN(bounds[0]) && isNaN(bounds[1])){ return true };
-
-      let lower = !isNaN(bounds[0]) ? data > bounds[0] : true;
-      let upper = !isNaN(bounds[1]) ? data < bounds[1] : true;
-
-      return lower && upper;
-    }
-  }
-
-  function sortDomains(a, b){
-    if (!sortParameter){ return true }
-    let s = 0;
-    if (sortParameter != "domain"){
-      s = a[sortParameter].cost - b[sortParameter].cost;
-    } else {
-      s = a[sortParameter] > b[sortParameter];
-    }
-
-    return (s * sortDirection);
-  }
-
-
-  function generateRow(domain){
-    let r = document.createElement("tr");
-    r.innerHTML = `
-      <td><a href="https://porkbun.com/tld/${domain.domain.slice(1)}" target="_blank">${domain.domain}</a></td>
-      <td>$${domain.price.cost}</td>
-      <td>$${domain.renewal.cost}</td>
-      <td>$${domain.transfer.cost}</td>
-    `
-
-    return r;
-  }
-
-  function updateSort(e){
-    sortParameter = e.target.dataset.f;
-    sortDirection = sortDirection * -1;
-    renderDomains();
-  }
-
-
-  (async() => {
-    renderDomains();
-  })();
-
-
-
-  [price_min, price_max, renewal_min, renewal_max, transfer_min, transfer_max].forEach( e => {
-    e.addEventListener("keyup", renderDomains);
-  })
-
-  document.querySelectorAll("th[id*='sort']").forEach( e => {
-    e.addEventListener("click", updateSort);
-  })
+  gtag('config', 'UA-42602876-6');
 </script>
+
+</body>
+</html>

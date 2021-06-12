@@ -1,0 +1,39 @@
+body {
+  font-family: 'Inter', sans-serif;
+  margin-top: 50px;
+  text-align: center;
+}
+
+table {
+  text-align: center;
+}
+h1, th {
+  font-family: 'Staatliches', cursive;
+}
+
+.footer {
+  text-transform: uppercase;
+  padding-top: 4px;
+  border-top: 1px solid #efefef;
+  text-align: right;
+  padding-bottom: 30px;
+}
+
+.footer p {
+  margin-bottom: 0px;
+  padding-right: 40px;
+}
+
+a {
+  color: #FF6B6B;
+  -o-transition:color .2s ease-out, background 1s ease-in;
+  -ms-transition:color .2s ease-out, background 1s ease-in;
+  -moz-transition:color .2s ease-out, background 1s ease-in;
+  -webkit-transition:color .2s ease-out, background 1s ease-in;
+  /* ...and now override with proper CSS property */
+  transition:color .2s ease-out, background 1s ease-in;
+}
+
+a:hover {
+  color: #6E0E0A;
+}
