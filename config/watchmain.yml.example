@@ -1,8 +1,12 @@
 mailgun:
-  api_key: ""
+  api_key: "" # LEAVE BLANK IF USING GITHUB ACTIONS / ENV SECRETS
   domain: ""
   from: ""
 
 
 whois:
-  api_key: ""
+  api_key: ""  # LEAVE BLANK IF USING GITHUB ACTIONS / ENV SECRETS
+
+
+domains:
+  - "google.com"
