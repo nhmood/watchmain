@@ -88,9 +88,18 @@ function generateRow(domain){
 }
 
 function updateSort(e){
-  sortParameter = e.target.dataset.f;
+  th = e.target;
+  if (th.tagName == "I"){
+    th = th.parentNode;
+  }
+
+  sortParameter = th.dataset.f;
   sortDirection = sortDirection * -1;
   renderDomains();
+
+  arrow = th.querySelector("i");
+  arrow.classList.toggle("fa-caret-up");
+  arrow.classList.toggle("fa-caret-down");
 }
 
 
