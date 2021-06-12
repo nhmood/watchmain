@@ -48,6 +48,16 @@ In order to provide the Porkbun Domain explorer, you'll need to enable GitHub Pa
 Go to the settings for the repo, select the Pages option, and point the path to `docs/`.  
 **NOTE - GitHub Pages are only available if the repo is public for free accounts**
 
+![GitHub Pages Config](https://github.com/nhmood/watchmain/raw/main/docs/images/GHPages.png)
+
+### GitHub Secrets
+The GitHub Actions workflows pull the Mailgun and WhoisXMLAPI API keys from environment variables that are set in the repo configuration.  
+Add the following secret names along with the associated API keys:
+- **MAILGUN_API_KEY**
+- **WHOIS_API_KEY**
+
+![GitHub Secrets Config](https://github.com/nhmood/watchmain/raw/main/docs/images/GHSecrets.png)
+
 ### GitHub Action Workflows
 By default, the GitHub Actions for checking the domain status [CheckDomainRegistration](https://github.com/nhmood/watchmain/blob/main/.github/workflows/check_domains.yml) and updating the Porkbun domain list [UpdatePorkbunDomains](https://github.com/nhmood/watchmain/blob/main/.github/workflows/update_domains.yml) are _not_ set to run automatically - this is to prevent accidental forks and wasted GitHub Action minutes.
 
@@ -72,7 +82,7 @@ Just navigate over to the Actions tab, select the workflow you want to test, and
 
 You should be able to see the full run and updated status. If this is the first time running you'll see that watchmain has committed updated domain status / porkbun domain data directly into the repo!
 
-
+![GitHub Workflow Manual Run](https://github.com/nhmood/watchmain/raw/main/docs/images/GHWorkflow.png)
 
 
 # Implementation Details
@@ -88,3 +98,4 @@ The scraper generates the JSON file and commits it back into the `docs/data/doma
 The Domain Status Checker utilizes WhoisXMLAPI to get the latest whois data on the specified domains.  
 It stores and compares the Base64 MD5 hash between runs to determine whether the data has changed.  
 If a change is detected, it generates a (basic) diff between the payloads and sends an email using [Mailgun](http://mailgun.com/)
+
