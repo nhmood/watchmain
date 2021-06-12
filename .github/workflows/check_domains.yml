@@ -1,0 +1,25 @@
+name: Check Domain Registration
+on:
+  schedule:
+    # 9am est
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+
+jobs:
+  CheckDomainRegistration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Install Crystal
+        uses: oprypin/install-crystal@v1
+
+      - name: Install shards
+        run: shards install --ignore-crystal-version
+
+      - name: Build Watchmain Checker
+        run: crystal build src/watchmain.cr
+
+      - name: Generate and Commit Domain Status Changes
+        run: ./bin/check_domains.sh
