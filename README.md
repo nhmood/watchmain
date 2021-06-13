@@ -2,11 +2,18 @@
 
 watchmain is a set of domain helpers that run with the help of various GitHub offerings.  
 The tool consists of two main components
-- Porkbun Explorer: web ui to search/filter on domains available on [porkbun](https://porkbun.com)
-- Domain Checker: domain status checker that emails you on any registration change
+- 🐷 Porkbun Explorer: web ui to search/filter on domains available on [porkbun](https://porkbun.com)
+- 🔎 Domain Checker: domain status checker that emails you on any registration change
 
 The great thing about watchmain is that it runs entirely with the help of GitHub Pages and GitHub Actions!  
 No need to setup any infrastructure, just fork the repo and update some configs and you'll be ready to go!
+
+I wrote the domain checker to notify me of an expiring domain (it worked, I got the domain!) and the Porkbun Explorer to try and find a vanity domain that didn't have a giant renewal fee. These ran on a VPS for a while and stood out as a perfect usecase to experiment with GitHub Actions.
+
+**👇 Check out a short demo to see how easy it is to set up!👇**  
+[![watchmain YouTube Demo](https://github.com/nhmood/watchmain/raw/main/docs/images/youtube.png)](https://youtu.be/xPm04Cr3eAU)
+
+
 
 ## Installation / Usage
 
@@ -85,7 +92,7 @@ You should be able to see the full run and updated status. If this is the first 
 ![GitHub Workflow Manual Run](https://github.com/nhmood/watchmain/raw/main/docs/images/GHWorkflow.png)
 
 
-# Implementation Details
+# Details
 Both the Porkbun Domain Explorer as well as the Domain Status Check rely on GitHub Actions building and running the scraper/checkers, generating the associated status files, and committing that data back into the repository to store state between runs.  
 
 
@@ -98,4 +105,3 @@ The scraper generates the JSON file and commits it back into the `docs/data/doma
 The Domain Status Checker utilizes WhoisXMLAPI to get the latest whois data on the specified domains.  
 It stores and compares the Base64 MD5 hash between runs to determine whether the data has changed.  
 If a change is detected, it generates a (basic) diff between the payloads and sends an email using [Mailgun](http://mailgun.com/)
-
